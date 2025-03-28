@@ -27,3 +27,10 @@ https://github.com/users/SpicyNine11/projects/3
 https://github.com/users/SpicyNine11/projects/5
 
 API Repo - https://github.com/SpicyNine11/Bowlingsite691CapAPI
+
+/src
+  /components  # Reusable UI components
+  /pages       # Page components
+  /services    # API calls
+  /styles      # CSS or styling frameworks
+  /assets      # Images, icons, etc.
