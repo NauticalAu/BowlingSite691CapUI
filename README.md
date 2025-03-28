@@ -17,3 +17,13 @@ The Bowling Hub UI is a web application that allows users to track scores, manag
 - **State Management**: (if applicable)
 - **Styling**: CSS framework (e.g., Tailwind, Bootstrap)
 - **API Communication**: RESTful API calls using Fetch/Axios
+
+  
+## Development Workflow
+Track tasks in the GitHub Projects section.
+
+Follow Agile sprints based on the UI Back Log.
+https://github.com/users/SpicyNine11/projects/3
+https://github.com/users/SpicyNine11/projects/5
+
+API Repo - https://github.com/SpicyNine11/Bowlingsite691CapAPI
