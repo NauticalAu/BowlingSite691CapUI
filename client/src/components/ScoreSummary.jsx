@@ -37,19 +37,34 @@ function ScoreSummary() {
   }, {});
 
   return (
-    <div>
-      <h2>Score Summary</h2>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
-      {!summary.length && !error && <p>Loading scores...</p>}
+    <div className="space-y-6">
+      {error && (
+        <p className="text-red-600 text-center font-semibold">{error}</p>
+      )}
+      {!summary.length && !error && (
+        <p className="text-center text-gray-600">⏳ Loading scores...</p>
+      )}
+
       {Object.entries(grouped).map(([gameId, frames]) => (
-        <div key={gameId} style={{ marginBottom: '1rem' }}>
-          <h4>
-            Game #{gameId} — <Link to={`/game/${gameId}`}>View Details</Link>
-          </h4>
-          <ul>
+        <div
+          key={gameId}
+          className="border border-gray-200 rounded-xl bg-white shadow-sm p-4"
+        >
+          <div className="flex justify-between items-center mb-2">
+            <h3 className="text-xl font-semibold text-secondary">
+              Game #{gameId}
+            </h3>
+            <Link
+              to={`/game/${gameId}`}
+              className="text-primary hover:underline font-medium"
+            >
+              🔍 View Details
+            </Link>
+          </div>
+          <ul className="text-[18px] text-gray-700 space-y-1">
             {frames.map((frame, idx) => (
               <li key={idx}>
-                Frame {frame.frame}: {frame.pins} pins
+                🎳 Frame {frame.frame}: <span className="font-semibold">{frame.pins} pins</span>
               </li>
             ))}
           </ul>
@@ -60,4 +75,3 @@ function ScoreSummary() {
 }
 
 export default ScoreSummary;
-// This code defines a ScoreSummary component that fetches and displays the summary of bowling scores.  

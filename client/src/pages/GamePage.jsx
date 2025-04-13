@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import Layout from '../components/Layout';
 
 function GamePage() {
   const [scores, setScores] = useState(Array(10).fill({ roll1: '', roll2: '' }));
@@ -52,7 +53,6 @@ function GamePage() {
     }
   };
 
-  // Function to calculate the total score based on entered frame data
   const calculateTotalScore = () => {
     return scores.reduce((total, frame) => {
       const roll1 = parseInt(frame.roll1) || 0;
@@ -62,52 +62,60 @@ function GamePage() {
   };
 
   return (
-    <div className="p-4">
-      <h2 className="text-2xl font-bold mb-4">Enter Scores</h2>
+      <div className="max-w-4xl mx-auto p-4 space-y-6">
+        <h2 className="text-3xl font-bold text-primary text-center">🎳 Enter Your Scores</h2>
 
-      <div className="grid grid-cols-3 gap-4 mb-6">
-        {scores.map((frame, i) => (
-          <div key={i} className="border p-2 rounded shadow-sm">
-            <h2 className="font-semibold mb-2">Frame {i + 1}</h2>
-            <div className="flex gap-2">
-              <input
-                type="number"
-                placeholder="Roll 1"
-                className="border px-2 py-1 w-20"
-                value={frame.roll1}
-                onChange={(e) => handleChange(i, 'roll1', e.target.value)}
-                min={0}
-                max={10}
-              />
-              <input
-                type="number"
-                placeholder="Roll 2"
-                className="border px-2 py-1 w-20"
-                value={frame.roll2}
-                onChange={(e) => handleChange(i, 'roll2', e.target.value)}
-                min={0}
-                max={10}
-              />
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+          {scores.map((frame, i) => (
+            <div key={i} className="border border-gray-200 p-4 rounded-xl shadow-sm bg-white">
+              <h3 className="text-lg font-semibold mb-2 text-secondary">Frame {i + 1}</h3>
+              <div className="flex gap-2">
+                <input
+                  type="number"
+                  placeholder="Roll 1"
+                  className="w-full p-2 border rounded-md focus:ring-secondary focus:border-secondary"
+                  value={frame.roll1}
+                  onChange={(e) => handleChange(i, 'roll1', e.target.value)}
+                  min={0}
+                  max={10}
+                />
+                <input
+                  type="number"
+                  placeholder="Roll 2"
+                  className="w-full p-2 border rounded-md focus:ring-secondary focus:border-secondary"
+                  value={frame.roll2}
+                  onChange={(e) => handleChange(i, 'roll2', e.target.value)}
+                  min={0}
+                  max={10}
+                />
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
+
+        <div className="text-center">
+          <button
+            onClick={handleSubmit}
+            className="bg-primary hover:bg-red-700 text-white px-6 py-2 rounded font-semibold"
+          >
+            💾 Submit Game
+          </button>
+          {message && <p className="mt-4 font-semibold">{message}</p>}
+        </div>
+
+        <div className="text-center">
+          <h3 className="text-xl font-bold text-secondary mt-6">
+            Total Score: {calculateTotalScore()}
+          </h3>
+        </div>
       </div>
-
-      <button
-        onClick={handleSubmit}
-        className="bg-green-600 text-white px-4 py-2 rounded"
-      >
-        Submit Game
-      </button>
-
-      {message && <p className="mt-4 font-semibold">{message}</p>}
-
-      {/* Show total score */}
-      <div className="mt-6">
-        <h3 className="text-lg font-semibold">Current Total Score: {calculateTotalScore()}</h3>
-      </div>
-    </div>
   );
 }
 
 export default GamePage;
+// Note: This code assumes you have a backend API running at http://localhost:8080/api/games/start and http://localhost:8080/api/games/score
+// that accepts POST requests to start a game and submit scores, respectively. Adjust the API endpoints as necessary based on your backend implementation.
+// The gameId is set when the game starts, and the scores are submitted for each frame.
+// The calculateTotalScore function computes the total score based on the entered scores.
+// The UI is responsive and uses Tailwind CSS classes for styling.
+// The game page allows users to enter scores for each frame and submit them to the server. 

@@ -1,3 +1,10 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+body {
+  @apply font-body bg-neutral text-gray-800;
+}
+h1, h2 {
+  @apply text-primary font-bold;
+}
