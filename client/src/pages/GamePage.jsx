@@ -28,8 +28,15 @@ function GamePage() {
         }
       );
       const gameData = await gameRes.json();
-      const newGameId = gameData.game.id;
+      const newGameId = gameData?.game?.id;
+
+      if (!newGameId) {
+        setMessage('❌ Failed to start game or missing game ID');
+        return;
+      }
+
       setGameId(newGameId);
+      console.log('🎳 New Game ID:', newGameId);
 
       for (let i = 0; i < scores.length; i++) {
         const frameNum = i + 1;
@@ -38,13 +45,12 @@ function GamePage() {
         const body = {
           gameId: newGameId,
           frame: frameNum,
-          firstRoll:
-            firstRoll !== '' && !isNaN(firstRoll) ? Number(firstRoll) : null,
-          secondRoll:
-            secondRoll !== '' && !isNaN(secondRoll) ? Number(secondRoll) : null,
-          bonusRoll:
-            bonusRoll !== '' && !isNaN(bonusRoll) ? Number(bonusRoll) : null
+          firstRoll: firstRoll !== '' ? Number(firstRoll) : null,
+          secondRoll: secondRoll !== '' ? Number(secondRoll) : null,
+          bonusRoll: bonusRoll !== '' ? Number(bonusRoll) : null
         };
+
+        console.log(`Submitting Frame ${frameNum}:`, body);
 
         if (body.firstRoll !== null || body.secondRoll !== null) {
           await fetch('https://bowling-api.onrender.com/api/games/score', {
