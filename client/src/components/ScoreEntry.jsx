@@ -40,7 +40,15 @@ function ScoreEntry() {
     const frameNum = Number(formData.frame);
     const firstRoll = formData.firstRoll !== '' ? Number(formData.firstRoll) : null;
     const secondRoll = formData.secondRoll !== '' ? Number(formData.secondRoll) : null;
-    const bonusRoll = formData.bonusRoll !== '' ? Number(formData.bonusRoll) : null;  
+    const bonusRoll = formData.bonusRoll !== '' ? Number(formData.bonusRoll) : null;
+
+    console.log('🚀 Submitting:', {
+      gameId,
+      frame: frameNum,
+      firstRoll,
+      secondRoll,
+      bonusRoll
+    });
 
     if (frameNum < 1 || frameNum > 10) {
       setMessage('❌ Frame must be between 1 and 10');
@@ -180,3 +188,4 @@ function ScoreEntry() {
 }
 
 export default ScoreEntry;
+// This component allows users to enter scores for a bowling game.  It includes a form for entering frame numbers and roll scores, and it handles starting a new game and submitting scores to the server. The component uses local storage to persist the game ID across page reloads.
