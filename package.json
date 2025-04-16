@@ -2,4 +2,9 @@
   "dependencies": {
     "react-router-dom": "^7.5.0"
   }
+
+"scripts": {
+  "start": "node server.js"
+}
+
 }

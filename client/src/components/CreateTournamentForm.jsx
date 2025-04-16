@@ -33,7 +33,7 @@ function CreateTournamentForm({ onCreated }) {
     console.log('📦 Submitting tournament payload:', payload);
 
     try {
-      const res = await fetch('http://localhost:8080/api/tournaments', {
+      const res = await fetch('http://bowling-api.onrender.com/api/tournaments', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',

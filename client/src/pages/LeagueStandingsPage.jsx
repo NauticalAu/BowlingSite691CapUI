@@ -4,7 +4,7 @@ const LeagueStandingsPage = ({ leagueId }) => {
   const [standings, setStandings] = useState([]);
 
   useEffect(() => {
-    fetch(`http://localhost:8080/api/leagues/${leagueId}/standings`)
+    fetch(`http://bowling-api.onrender.com/api/leagues/${leagueId}/standings`)
       .then(res => res.json())
       .then(data => setStandings(data))
       .catch(err => console.error('Error fetching standings:', err));

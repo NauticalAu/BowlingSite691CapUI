@@ -4,7 +4,7 @@ function LogoutButton() {
   const [message, setMessage] = useState('');
 
   const handleLogout = async () => {
-    const res = await fetch('http://localhost:8080/api/users/logout', {
+    const res = await fetch('http://bowling-api.onrender.com/api/users/logout', {
       method: 'POST',
       credentials: 'include',
     });
