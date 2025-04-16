@@ -1,191 +1,153 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
+import Layout from '../components/Layout';
 
-function ScoreEntry() {
-  const [gameId, setGameId] = useState(() => localStorage.getItem('gameId') || null);
-  const [formData, setFormData] = useState({
-    frame: '',
-    firstRoll: '',
-    secondRoll: '',
-    bonusRoll: ''
-  });
+function GamePage() {
+  const [scores, setScores] = useState(
+    Array(10).fill({ firstRoll: '', secondRoll: '', bonusRoll: '' })
+  );
+  const [gameId, setGameId] = useState(null);
   const [message, setMessage] = useState('');
 
-  const startGame = async () => {
-    try {
-      const res = await fetch('https://bowling-api.onrender.com/api/games/start', {
-        method: 'POST',
-        credentials: 'include'
-      });
-      const data = await res.json();
-      if (res.ok) {
-        setGameId(data.game.id);
-        localStorage.setItem('gameId', data.game.id);
-        setMessage(`🎳 Game #${data.game.id} started`);
-      } else {
-        setMessage(`❌ ${data.error}`);
-      }
-    } catch (err) {
-      console.error(err);
-      setMessage('❌ Error starting game');
-    }
+  const handleChange = (frameIndex, rollKey, value) => {
+    const updated = [...scores];
+    updated[frameIndex] = {
+      ...updated[frameIndex],
+      [rollKey]: value
+    };
+    setScores(updated);
   };
 
-  const handleChange = (e) => {
-    setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    const frameNum = Number(formData.frame);
-    const firstRoll = formData.firstRoll !== '' ? Number(formData.firstRoll) : null;
-    const secondRoll = formData.secondRoll !== '' ? Number(formData.secondRoll) : null;
-    const bonusRoll = formData.bonusRoll !== '' ? Number(formData.bonusRoll) : null;
-
-    console.log('🚀 Submitting:', {
-      gameId,
-      frame: frameNum,
-      firstRoll,
-      secondRoll,
-      bonusRoll
-    });
-
-    if (frameNum < 1 || frameNum > 10) {
-      setMessage('❌ Frame must be between 1 and 10');
-      return;
-    }
-
-    if (
-      firstRoll < 0 || firstRoll > 10 ||
-      (secondRoll !== null && (secondRoll < 0 || secondRoll > 10)) ||
-      (bonusRoll !== null && (bonusRoll < 0 || bonusRoll > 10))
-    ) {
-      setMessage('❌ All rolls must be between 0 and 10');
-      return;
-    }
-
-    if (!gameId) {
-      setMessage('❌ Please start a game first');
-      return;
-    }
-
+  const handleSubmit = async () => {
+    setMessage('');
     try {
-      const res = await fetch('https://bowling-api.onrender.com/api/games/score', {
-        method: 'POST',
-        credentials: 'include',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          gameId,
+      const gameRes = await fetch(
+        'https://bowling-api.onrender.com/api/games/start',
+        {
+          method: 'POST',
+          credentials: 'include'
+        }
+      );
+      const gameData = await gameRes.json();
+      const newGameId = gameData.game.id;
+      setGameId(newGameId);
+
+      for (let i = 0; i < scores.length; i++) {
+        const frameNum = i + 1;
+        const { firstRoll, secondRoll, bonusRoll } = scores[i];
+
+        const body = {
+          gameId: newGameId,
           frame: frameNum,
-          firstRoll,
-          secondRoll,
-          bonusRoll
-        })
-      });
+          firstRoll:
+            firstRoll !== '' && !isNaN(firstRoll) ? Number(firstRoll) : null,
+          secondRoll:
+            secondRoll !== '' && !isNaN(secondRoll) ? Number(secondRoll) : null,
+          bonusRoll:
+            bonusRoll !== '' && !isNaN(bonusRoll) ? Number(bonusRoll) : null
+        };
 
-      const data = await res.json();
-      if (res.ok) {
-        setMessage(`✅ Frame ${frameNum} submitted`);
-        setFormData({ frame: '', firstRoll: '', secondRoll: '', bonusRoll: '' });
-      } else {
-        setMessage(`❌ ${data.error}`);
+        if (body.firstRoll !== null || body.secondRoll !== null) {
+          await fetch('https://bowling-api.onrender.com/api/games/score', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
+            body: JSON.stringify(body)
+          });
+        }
       }
+
+      setMessage('✅ Game saved successfully!');
     } catch (err) {
-      console.error(err);
-      setMessage('❌ Error submitting score');
+      console.error('Error saving score:', err);
+      setMessage('❌ Failed to save score');
     }
+  };
+
+  const calculateTotalScore = () => {
+    return scores.reduce((total, frame) => {
+      const r1 = parseInt(frame.firstRoll) || 0;
+      const r2 = parseInt(frame.secondRoll) || 0;
+      const b = parseInt(frame.bonusRoll) || 0;
+      return total + r1 + r2 + b;
+    }, 0);
   };
 
   return (
-    <div className="bg-white max-w-md mx-auto rounded-xl shadow-md p-6 space-y-6">
-      <h2 className="text-2xl font-bold text-primary text-center">🎳 Score Entry (live Check)</h2>
+    <div className="max-w-4xl mx-auto p-4 space-y-6">
+      <h2 className="text-3xl font-bold text-primary text-center">
+        🎳 Enter Your Scores
+      </h2>
 
-      <div className="space-y-2 text-center">
-        <button
-          onClick={startGame}
-          className="bg-secondary hover:bg-blue-800 text-white px-4 py-2 rounded font-semibold"
-        >
-          ➕ Start New Game
-        </button>
-
-        {gameId && (
-          <div className="mt-2 text-sm">
-            <p className="text-gray-700 font-medium">
-              Current Game ID: <span className="text-primary">{gameId}</span>
-            </p>
-            <button
-              onClick={() => {
-                setGameId(null);
-                localStorage.removeItem('gameId');
-                setMessage('🧹 Game cleared');
-              }}
-              className="text-sm text-red-600 underline mt-1"
-            >
-              Clear Current Game
-            </button>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+        {scores.map((frame, i) => (
+          <div
+            key={i}
+            className="border border-gray-200 p-4 rounded-xl shadow-sm bg-white"
+          >
+            <h3 className="text-lg font-semibold mb-2 text-secondary">
+              Frame {i + 1}
+            </h3>
+            <div className="flex flex-col gap-2">
+              <input
+                type="number"
+                placeholder="Roll 1"
+                name="firstRoll"
+                className="w-full p-2 border rounded-md focus:ring-secondary focus:border-secondary"
+                value={frame.firstRoll}
+                onChange={(e) =>
+                  handleChange(i, 'firstRoll', e.target.value)
+                }
+                min={0}
+                max={10}
+              />
+              <input
+                type="number"
+                placeholder="Roll 2"
+                name="secondRoll"
+                className="w-full p-2 border rounded-md focus:ring-secondary focus:border-secondary"
+                value={frame.secondRoll}
+                onChange={(e) =>
+                  handleChange(i, 'secondRoll', e.target.value)
+                }
+                min={0}
+                max={10}
+              />
+              {i === 9 && (
+                <input
+                  type="number"
+                  placeholder="Bonus Roll"
+                  name="bonusRoll"
+                  className="w-full p-2 border rounded-md focus:ring-secondary focus:border-secondary"
+                  value={frame.bonusRoll}
+                  onChange={(e) =>
+                    handleChange(i, 'bonusRoll', e.target.value)
+                  }
+                  min={0}
+                  max={10}
+                />
+              )}
+            </div>
           </div>
-        )}
+        ))}
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <input
-          type="number"
-          name="frame"
-          placeholder="Frame #"
-          value={formData.frame}
-          onChange={handleChange}
-          min="1"
-          max="10"
-          required
-          className="w-full p-2 border border-gray-300 rounded focus:ring-secondary focus:border-secondary"
-        />
-        <input
-          type="number"
-          name="firstRoll"
-          placeholder="First Roll"
-          value={formData.firstRoll}
-          onChange={handleChange}
-          min="0"
-          max="10"
-          required
-          className="w-full p-2 border border-gray-300 rounded focus:ring-secondary focus:border-secondary"
-        />
-        <input
-          type="number"
-          name="secondRoll"
-          placeholder="Second Roll"
-          value={formData.secondRoll}
-          onChange={handleChange}
-          min="0"
-          max="10"
-          className="w-full p-2 border border-gray-300 rounded focus:ring-secondary focus:border-secondary"
-        />
-        <input
-          type="number"
-          name="bonusRoll"
-          placeholder="Bonus Roll (10th frame)"
-          value={formData.bonusRoll}
-          onChange={handleChange}
-          min="0"
-          max="10"
-          className="w-full p-2 border border-gray-300 rounded focus:ring-secondary focus:border-secondary"
-        />
+      <div className="text-center">
         <button
-          type="submit"
-          className="w-full py-2 bg-primary text-white rounded hover:bg-red-700 font-semibold"
+          onClick={handleSubmit}
+          className="bg-primary hover:bg-red-700 text-white px-6 py-2 rounded font-semibold"
         >
-          ✅ Submit Score
+          💾 Submit Game
         </button>
-      </form>
+        {message && <p className="mt-4 font-semibold">{message}</p>}
+      </div>
 
-      {message && (
-        <p className={`text-sm text-center font-medium ${message.startsWith('✅') ? 'text-green-600' : 'text-red-600'}`}>
-          {message}
-        </p>
-      )}
+      <div className="text-center">
+        <h3 className="text-xl font-bold text-secondary mt-6">
+          Total Score: {calculateTotalScore()}
+        </h3>
+      </div>
     </div>
   );
 }
 
-export default ScoreEntry;
-// This component allows users to enter scores for a bowling game.  It includes a form for entering frame numbers and roll scores, and it handles starting a new game and submitting scores to the server. The component uses local storage to persist the game ID across page reloads.
+export default GamePage;
