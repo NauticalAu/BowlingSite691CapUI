@@ -2,7 +2,12 @@ import React, { useState } from 'react';
 
 function ScoreEntry() {
   const [gameId, setGameId] = useState(() => localStorage.getItem('gameId') || null);
-  const [formData, setFormData] = useState({ frame: '', pins: '' });
+  const [formData, setFormData] = useState({
+    frame: '',
+    firstRoll: '',
+    secondRoll: '',
+    bonusRoll: ''
+  });
   const [message, setMessage] = useState('');
 
   const startGame = async () => {
@@ -33,15 +38,21 @@ function ScoreEntry() {
     e.preventDefault();
 
     const frameNum = Number(formData.frame);
-    const pinsNum = Number(formData.pins);
+    const firstRoll = Number(formData.firstRoll);
+    const secondRoll = formData.secondRoll ? Number(formData.secondRoll) : null;
+    const bonusRoll = formData.bonusRoll ? Number(formData.bonusRoll) : null;
 
     if (frameNum < 1 || frameNum > 10) {
       setMessage('❌ Frame must be between 1 and 10');
       return;
     }
 
-    if (pinsNum < 0 || pinsNum > 10) {
-      setMessage('❌ Pins must be between 0 and 10');
+    if (
+      firstRoll < 0 || firstRoll > 10 ||
+      (secondRoll !== null && (secondRoll < 0 || secondRoll > 10)) ||
+      (bonusRoll !== null && (bonusRoll < 0 || bonusRoll > 10))
+    ) {
+      setMessage('❌ All rolls must be between 0 and 10');
       return;
     }
 
@@ -51,17 +62,23 @@ function ScoreEntry() {
     }
 
     try {
-      const res = await fetch('https://bowling-api.onrender.com/api/scores/submit ', {
+      const res = await fetch('https://bowling-api.onrender.com/api/scores/submit', {
         method: 'POST',
         credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ gameId, frame: frameNum, pins: pinsNum })
+        body: JSON.stringify({
+          gameId,
+          frame: frameNum,
+          firstRoll,
+          secondRoll,
+          bonusRoll
+        })
       });
 
       const data = await res.json();
       if (res.ok) {
-        setMessage(`✅ Frame ${frameNum} submitted: ${pinsNum} pins`);
-        setFormData({ frame: '', pins: '' });
+        setMessage(`✅ Frame ${frameNum} submitted`);
+        setFormData({ frame: '', firstRoll: '', secondRoll: '', bonusRoll: '' });
       } else {
         setMessage(`❌ ${data.error}`);
       }
@@ -85,7 +102,9 @@ function ScoreEntry() {
 
         {gameId && (
           <div className="mt-2 text-sm">
-            <p className="text-gray-700 font-medium">Current Game ID: <span className="text-primary">{gameId}</span></p>
+            <p className="text-gray-700 font-medium">
+              Current Game ID: <span className="text-primary">{gameId}</span>
+            </p>
             <button
               onClick={() => {
                 setGameId(null);
@@ -114,13 +133,33 @@ function ScoreEntry() {
         />
         <input
           type="number"
-          name="pins"
-          placeholder="Pins"
-          value={formData.pins}
+          name="firstRoll"
+          placeholder="First Roll"
+          value={formData.firstRoll}
           onChange={handleChange}
           min="0"
           max="10"
           required
+          className="w-full p-2 border border-gray-300 rounded focus:ring-secondary focus:border-secondary"
+        />
+        <input
+          type="number"
+          name="secondRoll"
+          placeholder="Second Roll"
+          value={formData.secondRoll}
+          onChange={handleChange}
+          min="0"
+          max="10"
+          className="w-full p-2 border border-gray-300 rounded focus:ring-secondary focus:border-secondary"
+        />
+        <input
+          type="number"
+          name="bonusRoll"
+          placeholder="Bonus Roll (10th frame)"
+          value={formData.bonusRoll}
+          onChange={handleChange}
+          min="0"
+          max="10"
           className="w-full p-2 border border-gray-300 rounded focus:ring-secondary focus:border-secondary"
         />
         <button
