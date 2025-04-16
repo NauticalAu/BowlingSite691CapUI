@@ -15,7 +15,7 @@ import LeagueDashboardWrapper from './pages/LeagueDashboardWrapper';
 import TournamentsPage from './pages/TournamentsPage';
 import TourneyDetailsPage from './pages/TourneyDetailsPage';
 import AlleyDetailsPage from './pages/AlleyDetailsPage';
-import LeaderBoardPage from './pages/LeaderBoardPage';
+import LeaderBoardPg from './pages/LeaderBoardPg';
 
 import './App.css';
 
@@ -31,7 +31,7 @@ function App() {
           <Route path="/blog" element={<BlogPage />} />
           <Route path="/game/:id" element={<GameDetail />} />
           <Route path="/alleys/:id" element={<AlleyDetailsPage />} />
-          <Route path="/leaderboard" element={<LeaderBoardPage />} />
+          <Route path="/leaderboard" element={<LeaderBoardPg />} />
 
 
           {/* Protected Routes */}
