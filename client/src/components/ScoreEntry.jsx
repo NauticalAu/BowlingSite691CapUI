@@ -38,9 +38,9 @@ function ScoreEntry() {
     e.preventDefault();
 
     const frameNum = Number(formData.frame);
-    const firstRoll = Number(formData.firstRoll);
-    const secondRoll = formData.secondRoll ? Number(formData.secondRoll) : null;
-    const bonusRoll = formData.bonusRoll ? Number(formData.bonusRoll) : null;
+    const firstRoll = formData.firstRoll !== '' ? Number(formData.firstRoll) : null;
+    const secondRoll = formData.secondRoll !== '' ? Number(formData.secondRoll) : null;
+    const bonusRoll = formData.bonusRoll !== '' ? Number(formData.bonusRoll) : null;  
 
     if (frameNum < 1 || frameNum > 10) {
       setMessage('❌ Frame must be between 1 and 10');
