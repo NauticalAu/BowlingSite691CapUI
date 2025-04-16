@@ -98,7 +98,7 @@ function ScoreEntry() {
 
   return (
     <div className="bg-white max-w-md mx-auto rounded-xl shadow-md p-6 space-y-6">
-      <h2 className="text-2xl font-bold text-primary text-center">🎳 Score Entry</h2>
+      <h2 className="text-2xl font-bold text-primary text-center">🎳 Score Entry (live Check)</h2>
 
       <div className="space-y-2 text-center">
         <button
