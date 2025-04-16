@@ -51,7 +51,7 @@ function ScoreEntry() {
     }
 
     try {
-      const res = await fetch('https://bowling-api.onrender.com/api/games/score', {
+      const res = await fetch('https://bowling-api.onrender.com/api/scores/submit ', {
         method: 'POST',
         credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
