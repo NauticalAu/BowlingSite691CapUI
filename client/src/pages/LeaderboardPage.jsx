@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom'; // needed for profile links
 import { useAuth } from '../context/AuthContext'; // optional: highlight logged-in user
 
-function LeaderboardPage() {
+function LeaderBoardPage() {
   const [leaderboard, setLeaderboard] = useState([]);
   const [loading, setLoading] = useState(true);
   const { userId } = useAuth(); // optional: current user ID for highlighting

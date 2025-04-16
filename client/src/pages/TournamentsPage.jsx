@@ -163,3 +163,4 @@ const TournamentsPage = () => {
 };
 
 export default TournamentsPage;
+// This component fetches and displays a list of tournaments from the server. 

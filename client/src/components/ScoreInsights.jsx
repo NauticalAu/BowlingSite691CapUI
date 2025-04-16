@@ -123,3 +123,4 @@ function ScoreInsights() {
 }
 
 export default ScoreInsights;
+// Compare this snippet from client/src/components/ScoreEntry.jsx:
