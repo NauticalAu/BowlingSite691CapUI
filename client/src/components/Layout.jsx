@@ -24,6 +24,7 @@ function Layout({ children }) {
               <Link to="/tournaments" className="text-blue-700 hover:underline">🏆 Tournaments</Link>
               <Link to="/game" className="text-blue-700 hover:underline">🎳 Game</Link>
               <Link to="/scores" className="text-blue-700 hover:underline">📈 Scores</Link>
+              <Link to="/leaderboard" className="text-blue-700 hover:underline">Leaderboard</Link>
               <Link to="/profile" className="text-blue-700 hover:underline">👤 Profile</Link>
             </nav>
 

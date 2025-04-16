@@ -31,6 +31,8 @@ function App() {
           <Route path="/blog" element={<BlogPage />} />
           <Route path="/game/:id" element={<GameDetail />} />
           <Route path="/alleys/:id" element={<AlleyDetailsPage />} />
+          <Route path="/leaderboard" element={<LeaderboardPage />} />
+
 
           {/* Protected Routes */}
           <Route path="/profile" element={
