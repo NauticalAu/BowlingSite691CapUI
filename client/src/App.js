@@ -2,7 +2,6 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import PrivateRoute from './components/PrivateRoute';
 import Layout from './components/Layout';
-
 import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
@@ -16,6 +15,7 @@ import LeagueDashboardWrapper from './pages/LeagueDashboardWrapper';
 import TournamentsPage from './pages/TournamentsPage';
 import TourneyDetailsPage from './pages/TourneyDetailsPage';
 import AlleyDetailsPage from './pages/AlleyDetailsPage';
+import LeaderBoardPage from './pages/LeaderBoardPage';
 
 import './App.css';
 

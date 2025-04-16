@@ -91,4 +91,4 @@ function LeaderboardPage() {
   );
 }
 
-export default LeaderboardPage;
+export default LeaderBoardPage;
