@@ -15,7 +15,7 @@ function GamePage() {
   const handleSubmit = async () => {
     setMessage('');
     try {
-      const gameRes = await fetch('http://bowling-api.onrender.com/api/games/start', {
+      const gameRes = await fetch('https://bowling-api.onrender.com/api/games/start', {
         method: 'POST',
         credentials: 'include'
       });
@@ -28,7 +28,7 @@ function GamePage() {
         const { roll1, roll2 } = scores[i];
 
         if (roll1 !== '') {
-          await fetch('http://bowling-api.onrender.com/api/games/score', {
+          await fetch('https://bowling-api.onrender.com/api/games/score', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             credentials: 'include',
@@ -37,7 +37,7 @@ function GamePage() {
         }
 
         if (roll2 !== '') {
-          await fetch('http://bowling-api.onrender.com/api/games/score', {
+          await fetch('https://bowling-api.onrender.com/api/games/score', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             credentials: 'include',
@@ -113,7 +113,7 @@ function GamePage() {
 }
 
 export default GamePage;
-// Note: This code assumes you have a backend API running at http://bowling-api.onrender.com/api/games/start and http://bowling-api.onrender.com/api/games/score
+// Note: This code assumes you have a backend API running at https://bowling-api.onrender.com/api/games/start and https://bowling-api.onrender.com/api/games/score
 // that accepts POST requests to start a game and submit scores, respectively. Adjust the API endpoints as necessary based on your backend implementation.
 // The gameId is set when the game starts, and the scores are submitted for each frame.
 // The calculateTotalScore function computes the total score based on the entered scores.

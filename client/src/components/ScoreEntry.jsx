@@ -7,7 +7,7 @@ function ScoreEntry() {
 
   const startGame = async () => {
     try {
-      const res = await fetch('http://bowling-api.onrender.com/api/games/start', {
+      const res = await fetch('https://bowling-api.onrender.com/api/games/start', {
         method: 'POST',
         credentials: 'include'
       });
@@ -51,7 +51,7 @@ function ScoreEntry() {
     }
 
     try {
-      const res = await fetch('http://bowling-api.onrender.com/api/games/score', {
+      const res = await fetch('https://bowling-api.onrender.com/api/games/score', {
         method: 'POST',
         credentials: 'include',
         headers: { 'Content-Type': 'application/json' },

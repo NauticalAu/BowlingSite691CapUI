@@ -9,7 +9,7 @@ export const AuthProvider = ({ children }) => {
   // Define checkAuth outside useEffect so login() can access it
   const checkAuth = async () => {
     try {
-      const res = await fetch('http://bowling-api.onrender.com/api/users/me', {
+      const res = await fetch('https://bowling-api.onrender.com/api/users/me', {
         credentials: 'include'
       });
       if (res.ok) {
@@ -32,7 +32,7 @@ export const AuthProvider = ({ children }) => {
   const login = () => checkAuth();
 
   const logout = async () => {
-    await fetch('http://bowling-api.onrender.com/api/users/logout', {
+    await fetch('https://bowling-api.onrender.com/api/users/logout', {
       method: 'POST',
       credentials: 'include'
     });

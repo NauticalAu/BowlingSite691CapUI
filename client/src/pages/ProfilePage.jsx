@@ -8,7 +8,7 @@ function ProfilePage() {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const res = await fetch('http://bowling-api.onrender.com/api/profile', {
+        const res = await fetch('https://bowling-api.onrender.com/api/profile', {
           credentials: 'include'
         });
         const data = await res.json();
@@ -47,7 +47,7 @@ function ProfilePage() {
         ...(formData.password && { password: formData.password })
       };
 
-      const res = await fetch('http://bowling-api.onrender.com/api/profile', {
+      const res = await fetch('https://bowling-api.onrender.com/api/profile', {
         method: 'PUT',
         credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
@@ -121,7 +121,7 @@ function ProfilePage() {
             type="button"
             onClick={async () => {
               try {
-                const res = await fetch('http://bowling-api.onrender.com/api/users/logout', {
+                const res = await fetch('https://bowling-api.onrender.com/api/users/logout', {
                   method: 'POST',
                   credentials: 'include',
                 });

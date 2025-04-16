@@ -8,7 +8,7 @@ function ScoreSummary() {
   useEffect(() => {
     const fetchScores = async () => {
       try {
-        const res = await fetch('http://bowling-api.onrender.com/api/games/summary', {
+        const res = await fetch('https://bowling-api.onrender.com/api/games/summary', {
           credentials: 'include'
         });
         const data = await res.json();

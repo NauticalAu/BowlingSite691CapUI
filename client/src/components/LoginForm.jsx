@@ -12,7 +12,7 @@ function LoginForm() {
     e.preventDefault();
 
     try {
-      const res = await fetch('http://bowling-api.onrender.com/api/users/login', {
+      const res = await fetch('https://bowling-api.onrender.com/api/users/login', {
         method: 'POST',
         credentials: 'include',
         headers: { 'Content-Type': 'application/json' },

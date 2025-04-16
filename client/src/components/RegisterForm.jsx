@@ -12,7 +12,7 @@ function RegisterForm() {
     e.preventDefault();
 
     try {
-      const res = await fetch('http://bowling-api.onrender.com/api/users/register', {
+      const res = await fetch('https://bowling-api.onrender.com/api/users/register', {
         method: 'POST',
         credentials: 'include',
         headers: { 'Content-Type': 'application/json' },

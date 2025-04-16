@@ -8,14 +8,14 @@ const LeagueDashboardPage = ({ leagueId, userId }) => {
 
   // Load standings for the league
   useEffect(() => {
-    fetch(`http://bowling-api.onrender.com/api/leagues/${leagueId}/standings`)
+    fetch(`https://bowling-api.onrender.com/api/leagues/${leagueId}/standings`)
       .then(res => res.json())
       .then(data => setStandings(data))
       .catch(err => console.error('Failed to load standings:', err));
   }, [leagueId]);
 
   const handleJoin = () => {
-    fetch(`http://bowling-api.onrender.com/api/leagues/join`, {
+    fetch(`https://bowling-api.onrender.com/api/leagues/join`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ leagueId, userId }),
@@ -27,7 +27,7 @@ const LeagueDashboardPage = ({ leagueId, userId }) => {
 
   const handleCreateLeague = (e) => {
     e.preventDefault();
-    fetch(`http://bowling-api.onrender.com/api/leagues/create`, {
+    fetch(`https://bowling-api.onrender.com/api/leagues/create`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ ...createForm, createdBy: userId }),
