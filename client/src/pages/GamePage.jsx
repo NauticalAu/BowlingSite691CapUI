@@ -17,33 +17,39 @@ function GamePage() {
     setScores(updated);
   };
 
+  const startGame = async () => {
+    try {
+      const res = await fetch('https://bowling-api.onrender.com/api/games/start', {
+        method: 'POST',
+        credentials: 'include'
+      });
+      const data = await res.json();
+      if (res.ok && data?.game?.id) {
+        setGameId(data.game.id);
+        setMessage(`🎳 Game #${data.game.id} started`);
+        console.log('✅ Started Game:', data.game.id);
+      } else {
+        setMessage('❌ Failed to start game');
+      }
+    } catch (err) {
+      console.error('❌ Error starting game:', err);
+      setMessage('❌ Error starting game');
+    }
+  };
+
   const handleSubmit = async () => {
     setMessage('');
+    if (!gameId) {
+      setMessage('❌ Please start a game first');
+      return;
+    }
     try {
-      const gameRes = await fetch(
-        'https://bowling-api.onrender.com/api/games/start',
-        {
-          method: 'POST',
-          credentials: 'include'
-        }
-      );
-      const gameData = await gameRes.json();
-      const newGameId = gameData?.game?.id;
-
-      if (!newGameId) {
-        setMessage('❌ Failed to start game or missing game ID');
-        return;
-      }
-
-      setGameId(newGameId);
-      console.log('🎳 New Game ID:', newGameId);
-
       for (let i = 0; i < scores.length; i++) {
         const frameNum = i + 1;
         const { firstRoll, secondRoll, bonusRoll } = scores[i];
 
         const body = {
-          gameId: newGameId,
+          gameId: gameId,
           frame: frameNum,
           firstRoll: firstRoll !== '' ? Number(firstRoll) : null,
           secondRoll: secondRoll !== '' ? Number(secondRoll) : null,
@@ -84,6 +90,20 @@ function GamePage() {
         🎳 Enter Your Scores
       </h2>
 
+      <div className="text-center space-y-2">
+        <button
+          onClick={startGame}
+          className="bg-secondary hover:bg-blue-800 text-white px-4 py-2 rounded font-semibold"
+        >
+          ➕ Start New Game
+        </button>
+        {gameId && (
+          <div className="text-sm text-gray-700">
+            Current Game ID: <span className="text-primary font-semibold">{gameId}</span>
+          </div>
+        )}
+      </div>
+
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
         {scores.map((frame, i) => (
           <div
@@ -105,6 +125,7 @@ function GamePage() {
                 }
                 min={0}
                 max={10}
+                disabled={!gameId}
               />
               <input
                 type="number"
@@ -117,6 +138,7 @@ function GamePage() {
                 }
                 min={0}
                 max={10}
+                disabled={!gameId}
               />
               {i === 9 && (
                 <input
@@ -130,6 +152,7 @@ function GamePage() {
                   }
                   min={0}
                   max={10}
+                  disabled={!gameId}
                 />
               )}
             </div>
@@ -141,6 +164,7 @@ function GamePage() {
         <button
           onClick={handleSubmit}
           className="bg-primary hover:bg-red-700 text-white px-6 py-2 rounded font-semibold"
+          disabled={!gameId}
         >
           💾 Submit Game
         </button>
