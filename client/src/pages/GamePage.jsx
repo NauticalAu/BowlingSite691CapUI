@@ -24,18 +24,20 @@ function GamePage() {
         credentials: 'include'
       });
       const data = await res.json();
+      console.log('📦 Start game response:', data); 
+  
       if (res.ok && data?.game?.id) {
         setGameId(data.game.id);
         setMessage(`🎳 Game #${data.game.id} started`);
-        console.log('✅ Started Game:', data.game.id);
       } else {
-        setMessage('❌ Failed to start game');
+        setMessage(`❌ Failed to start game: ${data?.error || 'unknown error'}`);
       }
     } catch (err) {
       console.error('❌ Error starting game:', err);
       setMessage('❌ Error starting game');
     }
   };
+  
 
   const handleSubmit = async () => {
     setMessage('');
