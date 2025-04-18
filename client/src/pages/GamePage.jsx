@@ -28,9 +28,9 @@ function GamePage() {
       console.log('📦 Response status:', res.status);
       console.log('📦 Response body:', data);
   
-      if (res.ok && data?.game?.id) {
-        setGameId(data.game.id);
-        setMessage(`🎳 Game #${data.game.id} started`);
+      if (res.ok && data?.game?.game_id) {
+        setGameId(data.game.game_id);
+        setMessage(`🎳 Game #${data.game.game_id} started`);
       } else {
         const fallback = data?.error || `Unexpected response: ${JSON.stringify(data)}`;
         setMessage(`❌ Failed to start game: ${fallback}`);
