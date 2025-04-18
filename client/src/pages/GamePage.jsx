@@ -23,14 +23,17 @@ function GamePage() {
         method: 'POST',
         credentials: 'include'
       });
+  
       const data = await res.json();
-      console.log('📦 Start game response:', data); 
+      console.log('📦 Response status:', res.status);
+      console.log('📦 Response body:', data);
   
       if (res.ok && data?.game?.id) {
         setGameId(data.game.id);
         setMessage(`🎳 Game #${data.game.id} started`);
       } else {
-        setMessage(`❌ Failed to start game: ${data?.error || 'unknown error'}`);
+        const fallback = data?.error || `Unexpected response: ${JSON.stringify(data)}`;
+        setMessage(`❌ Failed to start game: ${fallback}`);
       }
     } catch (err) {
       console.error('❌ Error starting game:', err);
