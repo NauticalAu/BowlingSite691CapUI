@@ -23,11 +23,8 @@ function GamePage() {
         method: 'POST',
         credentials: 'include'
       });
-  
       const data = await res.json();
-      console.log('📦 Response status:', res.status);
-      console.log('📦 Response body:', data);
-  
+      console.log('📦 Start game response:', data);
       if (res.ok && data?.game?.game_id) {
         setGameId(data.game.game_id);
         setMessage(`🎳 Game #${data.game.game_id} started`);
@@ -40,7 +37,6 @@ function GamePage() {
       setMessage('❌ Error starting game');
     }
   };
-  
 
   const handleSubmit = async () => {
     setMessage('');
