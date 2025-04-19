@@ -9,6 +9,7 @@ import GamePage from './pages/GamePage';
 import ScoreSummaryPage from './pages/ScoreSummaryPage';
 import FinderPage from './pages/FinderPage';
 import BlogListPage from './pages/BlogListPage';
+import BlogPostPage from './pages/BlogPostPage';
 import GameDetail from './components/GameDetail';
 import ProfilePage from './pages/ProfilePage';
 import LeagueDashboardWrapper from './pages/LeagueDashboardWrapper';
@@ -18,6 +19,7 @@ import AlleyDetailsPage from './pages/AlleyDetailsPage';
 import LeaderBoardPg from './pages/LeaderBoardPg';
 import FavoritesPage from './pages/FavoritesPage';
 import BlogCreatePage from './pages/BlogCreatePage';
+import BlogEditPage from './pages/BlogEditPage';
 
 import './App.css';
 
@@ -31,6 +33,8 @@ function App() {
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/finder" element={<FinderPage />} />
           <Route path="/blog" element={<BlogListPage />} />
+          <Route path="/blog/:id" element={<BlogPostPage />} />
+          <Route path="/favorites" element={<FavoritesPage />} />
           <Route path="/game/:id" element={<GameDetail />} />
           <Route path="/alleys/:id" element={<AlleyDetailsPage />} />
           <Route path="/leaderboard" element={<LeaderBoardPg />} />
@@ -75,6 +79,11 @@ function App() {
           <Route path="/blog/create" element={
             <PrivateRoute>
               <BlogCreatePage />
+            </PrivateRoute>
+          } />
+          <Route path="/blog/:id/edit" element={
+            <PrivateRoute>
+              <BlogEditPage />
             </PrivateRoute>
           } />
         </Routes>

@@ -27,7 +27,7 @@ function BlogListPage() {
 
       <div className="text-right">
         <Link
-          to="/blog/new"
+          to="/blog/create"
           className="inline-block bg-primary text-white font-semibold px-4 py-2 rounded hover:bg-red-700"
         >
           ➕ New Post
