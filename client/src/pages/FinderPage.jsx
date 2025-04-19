@@ -29,7 +29,9 @@ function FinderPage() {
     setMessage(`🔍 Searching for alleys near ${zip}...`);
 
     try {
-      const res = await fetch(`/api/alleys/search?zip=${zip}`);
+      const res = await fetch(`https://bowling-api.onrender.com/api/alleys/search?zip=${zip}`, {
+        credentials: 'include'
+      });
       const data = await res.json();
 
       if (data.alleys && data.alleys.length > 0) {
@@ -78,7 +80,6 @@ function FinderPage() {
   );
 
   return (
-    <Layout>
       <div className="max-w-5xl mx-auto bg-white rounded-xl shadow-md p-6 space-y-6">
         <div className="text-center">
           <h1 className="text-3xl font-bold text-primary">Find a Bowling Alley</h1>
@@ -186,7 +187,6 @@ function FinderPage() {
           </div>
         )}
       </div>
-    </Layout>
   );
 }
 
