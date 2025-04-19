@@ -17,6 +17,7 @@ import TourneyDetailsPage from './pages/TourneyDetailsPage';
 import AlleyDetailsPage from './pages/AlleyDetailsPage';
 import LeaderBoardPg from './pages/LeaderBoardPg';
 import FavoritesPage from './pages/FavoritesPage';
+import BlogCreatePage from './pages/BlogCreatePage';
 
 import './App.css';
 
@@ -69,6 +70,11 @@ function App() {
           <Route path="/favorites" element={
             <PrivateRoute>
               <FavoritesPage />
+            </PrivateRoute>
+          } />
+          <Route path="/blog/create" element={
+            <PrivateRoute>
+              <BlogCreatePage />
             </PrivateRoute>
           } />
         </Routes>
