@@ -8,3 +8,5 @@ body {
 h1, h2 {
   @apply text-primary font-bold;
 }
+
+@import 'leaflet/dist/leaflet.css';

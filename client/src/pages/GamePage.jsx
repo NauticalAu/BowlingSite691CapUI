@@ -174,7 +174,7 @@ function GamePage() {
 
       <div className="text-center">
         <h3 className="text-xl font-bold text-secondary mt-6">
-          Total Score: {calculateTotalScore()}
+          Total Score will be shown after submission
         </h3>
       </div>
     </div>

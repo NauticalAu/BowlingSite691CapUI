@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 
 function ProfilePage() {
   const [profile, setProfile] = useState(null);
@@ -138,6 +139,12 @@ function ProfilePage() {
           >
             🚪 Log Out
           </button>
+          <Link
+            to="/favorites"
+            className="block text-center text-sm text-blue-600 hover:underline mt-4"
+          >
+            ❤️ View Saved Alleys
+          </Link>
       </div>
     </div>
   );

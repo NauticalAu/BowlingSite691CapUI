@@ -8,7 +8,7 @@ import RegisterPage from './pages/RegisterPage';
 import GamePage from './pages/GamePage';
 import ScoreSummaryPage from './pages/ScoreSummaryPage';
 import FinderPage from './pages/FinderPage';
-import BlogPage from './pages/BlogPage';
+import BlogListPage from './pages/BlogListPage';
 import GameDetail from './components/GameDetail';
 import ProfilePage from './pages/ProfilePage';
 import LeagueDashboardWrapper from './pages/LeagueDashboardWrapper';
@@ -16,6 +16,7 @@ import TournamentsPage from './pages/TournamentsPage';
 import TourneyDetailsPage from './pages/TourneyDetailsPage';
 import AlleyDetailsPage from './pages/AlleyDetailsPage';
 import LeaderBoardPg from './pages/LeaderBoardPg';
+import FavoritesPage from './pages/FavoritesPage';
 
 import './App.css';
 
@@ -28,7 +29,7 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/finder" element={<FinderPage />} />
-          <Route path="/blog" element={<BlogPage />} />
+          <Route path="/blog" element={<BlogListPage />} />
           <Route path="/game/:id" element={<GameDetail />} />
           <Route path="/alleys/:id" element={<AlleyDetailsPage />} />
           <Route path="/leaderboard" element={<LeaderBoardPg />} />
@@ -63,6 +64,11 @@ function App() {
           <Route path="/tournaments/:id" element={
             <PrivateRoute>
               <TourneyDetailsPage />
+            </PrivateRoute>
+          } />
+          <Route path="/favorites" element={
+            <PrivateRoute>
+              <FavoritesPage />
             </PrivateRoute>
           } />
         </Routes>
