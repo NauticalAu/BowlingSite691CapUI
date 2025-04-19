@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import Layout from '../components/Layout';
+import { Link } from 'react-router-dom';
 
 function FavoritesPage() {
   const [favorites, setFavorites] = useState([]);
   const [message, setMessage] = useState('');
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchFavorites = async () => {
@@ -18,6 +20,8 @@ function FavoritesPage() {
       } catch (err) {
         console.error(err);
         setMessage('❌ Error loading favorites');
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -49,37 +53,53 @@ function FavoritesPage() {
     <Layout>
       <div className="max-w-4xl mx-auto bg-white rounded-xl shadow-lg p-6 space-y-6">
         <h1 className="text-3xl font-bold text-primary text-center">🎯 Your Favorite Alleys</h1>
-        {message && <p className="text-sm text-gray-700">{message}</p>}
-        {favorites.length === 0 ? (
+
+        {message && <p className="text-sm text-gray-700 text-center">{message}</p>}
+
+        {loading ? (
+          <p className="text-center text-gray-500">Loading your favorites...</p>
+        ) : favorites.length === 0 ? (
           <p className="text-center text-gray-500">No favorites yet.</p>
         ) : (
-          <ul className="space-y-3">
-            {favorites.map((fav) => (
-              <li
-                key={fav.id}
-                className="border p-4 rounded bg-gray-50 shadow-sm flex justify-between items-start"
-              >
-                <div>
-                  <p className="font-bold text-primary text-lg">{fav.name}</p>
-                  <p className="text-gray-600">{fav.address}</p>
-                  <a
-                    href={`https://www.google.com/maps/place/?q=place_id:${fav.place_id}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-blue-600 hover:underline text-sm"
-                  >
-                    Open in Google Maps
-                  </a>
-                </div>
-                <button
-                  onClick={() => handleDelete(fav.id)}
-                  className="text-red-600 text-sm hover:underline"
+          <>
+            <p className="text-center text-sm text-gray-600">
+              You have {favorites.length} saved {favorites.length === 1 ? 'alley' : 'alleys'}.
+            </p>
+
+            <ul className="space-y-3">
+              {favorites.map((fav) => (
+                <li
+                  key={fav.id}
+                  className="border p-4 rounded bg-gray-50 shadow-sm flex justify-between items-start"
                 >
-                  🗑️ Remove
-                </button>
-              </li>
-            ))}
-          </ul>
+                  <div>
+                    <p className="font-bold text-primary text-lg">{fav.name}</p>
+                    <p className="text-gray-600">{fav.address}</p>
+                    <a
+                      href={`https://www.google.com/maps/place/?q=place_id:${fav.place_id}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-600 hover:underline text-sm"
+                    >
+                      Open in Google Maps
+                    </a>
+                  </div>
+                  <button
+                    onClick={() => handleDelete(fav.id)}
+                    className="text-red-600 text-sm hover:underline"
+                  >
+                    🗑️ Remove
+                  </button>
+                </li>
+              ))}
+            </ul>
+
+            <div className="text-center mt-4">
+              <Link to="/finder" className="text-sm text-blue-600 hover:underline">
+                🔍 Back to Alley Finder
+              </Link>
+            </div>
+          </>
         )}
       </div>
     </Layout>
