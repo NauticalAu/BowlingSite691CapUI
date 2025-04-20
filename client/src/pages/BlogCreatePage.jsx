@@ -21,7 +21,7 @@ function BlogCreatePage() {
     setLoading(true);
 
     try {
-      const res = await fetch('https://bowling-api.onrender.com/api/blogs', {
+      const res = await fetch('https://bowling-api.onrender.com/api/blog', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
