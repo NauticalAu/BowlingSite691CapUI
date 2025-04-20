@@ -14,7 +14,7 @@ const TournamentsPage = () => {
 
   // Fetch tournaments from API
   const fetchTournaments = () => {
-    fetch('/api/tournaments')
+    fetch('https://bowling-api.onrender.com/api/tournaments')
       .then(res => res.json())
       .then(data => {
         console.log('🎯 Fetched tournaments:', data);
@@ -31,7 +31,7 @@ const TournamentsPage = () => {
   const handleJoin = async (tournamentId) => {
     const userId = 1; // Replace with actual session value later
     try {
-      await fetch(`/api/tournaments/${tournamentId}/join`, {
+      await fetch(`https://bowling-api.onrender.com/api/tournaments/${tournamentId}/join`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ userId }),
@@ -47,7 +47,7 @@ const TournamentsPage = () => {
     if (!window.confirm('Are you sure you want to delete this tournament?')) return;
 
     try {
-      const res = await fetch(`/api/tournaments/${tournamentId}`, {
+      const res = await fetch(`https://bowling-api.onrender.com/api/tournaments/${tournamentId}`, {
         method: 'DELETE',
       });
 
