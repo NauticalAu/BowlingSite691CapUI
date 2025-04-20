@@ -32,7 +32,7 @@ function FavoritesPage() {
     if (!window.confirm('Remove this favorite?')) return;
 
     try {
-      const res = await fetch(`/api/favorites/${id}`, {
+      const res = await fetch(`https://bowling-api.onrender.com/api/favorites/${id}`, {
         method: 'DELETE',
         credentials: 'include'
       });
