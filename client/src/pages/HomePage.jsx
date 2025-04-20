@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import Layout from '../components/Layout';
 
+
 function HomePage() {
   return (
       <div className="text-center py-12 space-y-6">
