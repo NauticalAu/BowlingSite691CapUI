@@ -10,7 +10,7 @@ function FavoritesPage() {
   useEffect(() => {
     const fetchFavorites = async () => {
       try {
-        const res = await fetch('/api/favorites', { credentials: 'include' });
+        const res = await fetch('https://bowling-api.onrender.com/api/favorites', { credentials: 'include' });
         const data = await res.json();
         if (res.ok) {
           setFavorites(data.favorites);
@@ -107,3 +107,7 @@ function FavoritesPage() {
 }
 
 export default FavoritesPage;
+// Compare this snippet from client/src/components/ScoreSummary.jsx:
+// import React, { useEffect, useState } from 'react';
+// import { useParams } from 'react-router-dom';
+// import Layout from '../components/Layout';   
