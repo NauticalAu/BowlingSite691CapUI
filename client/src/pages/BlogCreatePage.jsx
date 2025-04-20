@@ -45,7 +45,6 @@ function BlogCreatePage() {
   };
 
   return (
-    <Layout>
       <div className="max-w-3xl mx-auto bg-white shadow-lg p-6 rounded-xl space-y-6">
         <h1 className="text-3xl font-bold text-center text-primary">📝 Create a New Blog Post</h1>
 
@@ -75,7 +74,6 @@ function BlogCreatePage() {
           </button>
         </form>
       </div>
-    </Layout>
   );
 }
 
