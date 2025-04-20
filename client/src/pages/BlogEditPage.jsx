@@ -11,7 +11,7 @@ function BlogEditPage() {
   useEffect(() => {
     const fetchPost = async () => {
       try {
-        const res = await fetch(`/api/blog/${id}`);
+        const res = await fetch(`https://bowling-api.onrender.com/api/blog/${id}`);
         const data = await res.json();
         setTitle(data.post.title);
         setContent(data.post.content);
@@ -28,7 +28,7 @@ function BlogEditPage() {
     setError('');
 
     try {
-      const res = await fetch(`/api/blog/${id}`, {
+      const res = await fetch(`https://bowling-api.onrender.com/api/blog/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',

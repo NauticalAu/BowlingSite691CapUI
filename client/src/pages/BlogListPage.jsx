@@ -8,7 +8,7 @@ function BlogListPage() {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const res = await fetch('/api/blog');
+        const res = await fetch('https://bowling-api.onrender.com/api/blog');
         const data = await res.json();
         setPosts(data);
       } catch (err) {

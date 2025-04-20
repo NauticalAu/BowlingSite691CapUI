@@ -14,7 +14,7 @@ function BlogPostPage() {
   useEffect(() => {
     const fetchPost = async () => {
       try {
-        const res = await fetch(`/api/blog/${id}`);
+        const res = await fetch(`https://bowling-api.onrender.com/api/blog/${id}`);
         const data = await res.json();
         setPost(data.post);
         setComments(data.comments);
@@ -30,7 +30,7 @@ function BlogPostPage() {
     if (!commentText.trim()) return;
 
     try {
-      const res = await fetch(`/api/blog/${id}/comments`, {
+      const res = await fetch(`https://bowling-api.onrender.com/api/blog/${id}/comments`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
