@@ -52,7 +52,7 @@ function FinderPage() {
 
   const saveFavorite = async (alley) => {
     try {
-      const res = await fetch('/api/favorites', {
+      const res = await fetch('https://bowling-api.onrender.com/api/favorites', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include', // Required for session-based auth
