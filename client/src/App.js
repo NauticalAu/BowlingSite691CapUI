@@ -19,7 +19,6 @@ import AlleyDetailsPage from './pages/AlleyDetailsPage';
 import LeaderBoardPg from './pages/LeaderBoardPg';
 import FavoritesPage from './pages/FavoritesPage';
 import BlogCreatePage from './pages/BlogCreatePage';
-import BlogEditPage from './pages/BlogEditPage';
 
 import './App.css';
 
@@ -79,11 +78,6 @@ function App() {
           <Route path="/blog/create" element={
             <PrivateRoute>
               <BlogCreatePage />
-            </PrivateRoute>
-          } />
-          <Route path="/blog/:id/edit" element={
-            <PrivateRoute>
-              <BlogEditPage />
             </PrivateRoute>
           } />
         </Routes>
