@@ -50,7 +50,6 @@ function FavoritesPage() {
   };
 
   return (
-    <Layout>
       <div className="max-w-4xl mx-auto bg-white rounded-xl shadow-lg p-6 space-y-6">
         <h1 className="text-3xl font-bold text-primary text-center">🎯 Your Favorite Alleys</h1>
 
@@ -102,7 +101,6 @@ function FavoritesPage() {
           </>
         )}
       </div>
-    </Layout>
   );
 }
 
