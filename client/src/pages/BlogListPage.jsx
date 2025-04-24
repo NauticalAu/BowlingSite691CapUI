@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 export default function BlogListPage() {
-  const [posts, setPosts]       = useState([]);
-  const [loading, setLoading]   = useState(true);
+  const [posts, setPosts] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [editingId, setEditingId] = useState(null);
   const [formData, setFormData] = useState({ title: '', content: '' });
 
@@ -11,7 +11,7 @@ export default function BlogListPage() {
   const fetchPosts = async () => {
     setLoading(true);
     try {
-      const res  = await fetch('https://bowling-api.onrender.com/api/blogs', { credentials: 'include' });
+      const res = await fetch('https://bowling-api.onrender.com/api/blog', { credentials: 'include' });
       const data = await res.json();
       setPosts(data);
     } catch (err) {
@@ -37,7 +37,7 @@ export default function BlogListPage() {
     setFormData({ title: '', content: '' });
   };
 
-  // Input change
+  // Handle input changes
   const handleChange = e => {
     const { name, value } = e.target;
     setFormData(fd => ({ ...fd, [name]: value }));
@@ -48,7 +48,7 @@ export default function BlogListPage() {
     e.preventDefault();
     try {
       const res = await fetch(
-        `https://bowling-api.onrender.com/api/blogs/${editingId}`,
+        `https://bowling-api.onrender.com/api/blog/${editingId}`,
         {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
@@ -65,12 +65,12 @@ export default function BlogListPage() {
     }
   };
 
-  // Delete
+  // Delete post
   const handleDelete = async id => {
     if (!window.confirm('Delete this post?')) return;
     try {
       const res = await fetch(
-        `https://bowling-api.onrender.com/api/blogs/${id}`,
+        `https://bowling-api.onrender.com/api/blog/${id}`,
         { method: 'DELETE', credentials: 'include' }
       );
       if (!res.ok) throw new Error();
@@ -86,10 +86,9 @@ export default function BlogListPage() {
       <h1 className="text-4xl font-bold text-center text-secondary">📝 Bowling Hub Blog</h1>
 
       <div className="text-right">
-        <Link
-          to="/blog/create"
-          className="btn-primary inline-block mb-4"
-        >➕ New Post</Link>
+        <Link to="/blog/create" className="btn-primary inline-block mb-4">
+          ➕ New Post
+        </Link>
       </div>
 
       {loading ? (
@@ -124,10 +123,14 @@ export default function BlogListPage() {
                   <Link
                     to={`/blog/${post.id}`}
                     className="text-2xl text-primary font-bold hover:underline"
-                  >{post.title}</Link>
-                  <p className="text-sm text-gray-500 mt-1">by {post.full_name} on {new Date(post.created_at).toLocaleDateString()}</p>
+                  >
+                    {post.title}
+                  </Link>
+                  <p className="text-sm text-gray-500 mt-1">
+                    by {post.full_name} on {new Date(post.created_at).toLocaleDateString()}
+                  </p>
                   <p className="mt-2 text-gray-700 line-clamp-3">
-                    {post.content.length > 200 ? post.content.slice(0,200) + '...' : post.content}
+                    {post.content.length > 200 ? post.content.slice(0, 200) + '...' : post.content}
                   </p>
                   <div className="mt-4 flex space-x-2">
                     <button onClick={() => startEdit(post)} className="btn-accent text-sm">Edit</button>
