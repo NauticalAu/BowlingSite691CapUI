@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import Layout from '../components/Layout';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
@@ -29,13 +30,18 @@ function FinderPage() {
     setMessage(`🔍 Searching for alleys near ${zip}...`);
 
     try {
-      const res = await fetch(`https://bowling-api.onrender.com/api/alleys/search?zip=${zip}`, {
-        credentials: 'include'
-      });
+      const res = await fetch(
+        `https://bowling-api.onrender.com/api/alleys/search?zip=${zip}`,
+        {
+          credentials: 'include',
+        }
+      );
       const data = await res.json();
 
       if (data.alleys && data.alleys.length > 0) {
-        setResults(data.alleys);
+        setResults(data.alleys.filter(alley =>
+          minRating ? alley.rating >= parseFloat(minRating) : true
+        ));
         setMessage(`✅ Found ${data.alleys.length} results for ${zip}`);
       } else {
         setResults([]);
@@ -52,16 +58,19 @@ function FinderPage() {
 
   const saveFavorite = async (alley) => {
     try {
-      const res = await fetch('https://bowling-api.onrender.com/api/favorites', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include', // Required for session-based auth
-        body: JSON.stringify({
-          name: alley.name,
-          address: alley.address,
-          place_id: alley.place_id
-        })
-      });
+      const res = await fetch(
+        'https://bowling-api.onrender.com/api/favorites',
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify({
+            name: alley.name,
+            address: alley.address,
+            place_id: alley.place_id,
+          }),
+        }
+      );
 
       const data = await res.json();
       if (res.ok) {
@@ -75,11 +84,8 @@ function FinderPage() {
     }
   };
 
-  const filteredResults = results.filter((alley) =>
-    minRating ? alley.rating >= parseFloat(minRating) : true
-  );
-
   return (
+    <Layout>
       <div className="max-w-5xl mx-auto bg-white rounded-xl shadow-md p-6 space-y-6">
         <div className="text-center">
           <h1 className="text-3xl font-bold text-primary">Find a Bowling Alley</h1>
@@ -88,9 +94,15 @@ function FinderPage() {
           </p>
         </div>
 
-        <form onSubmit={handleSubmit} className="flex flex-col gap-4 md:flex-row md:items-end">
+        <form
+          onSubmit={handleSubmit}
+          className="flex flex-col gap-4 md:flex-row md:items-end"
+        >
           <div className="flex-1">
-            <label htmlFor="zipcode" className="block text-sm font-medium text-gray-700">
+            <label
+              htmlFor="zipcode"
+              className="block text-sm font-medium text-gray-700"
+            >
               Zip Code:
             </label>
             <input
@@ -104,7 +116,9 @@ function FinderPage() {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700">Min Rating</label>
+            <label className="block text-sm font-medium text-gray-700">
+              Min Rating
+            </label>
             <select
               value={minRating}
               onChange={(e) => setMinRating(e.target.value)}
@@ -127,14 +141,22 @@ function FinderPage() {
 
         {message && <p className="text-sm text-gray-700">{message}</p>}
 
-        {filteredResults.length > 0 && (
+        {results.length > 0 && (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <h2 className="text-xl font-semibold text-gray-800 mb-2">Results</h2>
+              <h2 className="text-xl font-semibold text-gray-800 mb-2">
+                Results
+              </h2>
               <ul className="space-y-2 text-gray-700">
-                {filteredResults.map((alley, idx) => (
-                  <li key={idx} className="p-3 rounded bg-gray-50 shadow-sm border border-gray-200">
-                    <p className="font-bold text-primary">🎳 {alley.name}</p>
+                {results.map((alley, idx) => (
+                  <li
+                    key={idx}
+                    className="p-3 rounded bg-gray-50 shadow-sm border border-gray-200"
+                  >
+                    <p className="font-bold text-primary">
+                      🎳{' '}
+                      <Link to={`/alleys/${alley.place_id}`}>{alley.name}</Link>
+                    </p>
                     <p>📍 {alley.address}</p>
                     <p>⭐ Rating: {alley.rating || 'N/A'}</p>
                     <a
@@ -158,7 +180,11 @@ function FinderPage() {
 
             <div className="h-[400px] rounded overflow-hidden">
               <MapContainer
-                center={[filteredResults[0]?.location.lat || 39.5, filteredResults[0]?.location.lng || -98.35]}
+                center={
+                  results[0]
+                    ? [results[0].location.lat, results[0].location.lng]
+                    : [39.5, -98.35]
+                }
                 zoom={11}
                 scrollWheelZoom={false}
                 style={{ height: '100%', width: '100%' }}
@@ -167,7 +193,7 @@ function FinderPage() {
                   attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                   url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 />
-                {filteredResults.map((alley, idx) => (
+                {results.map((alley, idx) => (
                   <Marker
                     key={idx}
                     position={[alley.location.lat, alley.location.lng]}
@@ -187,6 +213,7 @@ function FinderPage() {
           </div>
         )}
       </div>
+    </Layout>
   );
 }
 
