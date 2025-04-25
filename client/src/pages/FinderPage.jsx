@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import Layout from '../components/Layout';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
@@ -85,7 +84,6 @@ function FinderPage() {
   };
 
   return (
-    <Layout>
       <div className="max-w-5xl mx-auto bg-white rounded-xl shadow-md p-6 space-y-6">
         <div className="text-center">
           <h1 className="text-3xl font-bold text-primary">Find a Bowling Alley</h1>
@@ -213,7 +211,6 @@ function FinderPage() {
           </div>
         )}
       </div>
-    </Layout>
   );
 }
 

@@ -12,7 +12,7 @@ export default function AlleyDetailsPage() {
 
   // Fetch alley details
   useEffect(() => {
-    fetch(`/api/alleys/${placeId}`)
+    fetch(`bowling-api.onrender.com/api/alleys/${placeId}`)
       .then(res => {
         if (!res.ok) throw new Error('Alley not found');
         return res.json();
@@ -24,7 +24,7 @@ export default function AlleyDetailsPage() {
   // Fetch reviews
   const fetchReviews = async () => {
     try {
-      const res  = await fetch(`/api/places/${placeId}/reviews`, { credentials: 'include' });
+      const res  = await fetch(`bowling-api.onrender.com/api/places/${placeId}/reviews`, { credentials: 'include' });
       const data = await res.json();
       setReviews(data);
     } catch {
@@ -37,7 +37,7 @@ export default function AlleyDetailsPage() {
   const handleSubmitReview = async (e) => {
     e.preventDefault();
     try {
-      await fetch(`/api/places/${placeId}/reviews`, {
+      await fetch(`bowling-api.onrender.com/api/places/${placeId}/reviews`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
