@@ -12,7 +12,9 @@ export default function AlleyDetailsPage() {
 
   // Fetch alley details
   useEffect(() => {
-    fetch(`bowling-api.onrender.com/api/alleys/${placeId}`)
+    fetch(`https://bowling-api.onrender.com/api/alleys/${placeId}`, {
+      credentials: 'include'
+    })
       .then(res => {
         if (!res.ok) throw new Error('Alley not found');
         return res.json();
@@ -24,7 +26,10 @@ export default function AlleyDetailsPage() {
   // Fetch reviews
   const fetchReviews = async () => {
     try {
-      const res  = await fetch(`bowling-api.onrender.com/api/places/${placeId}/reviews`, { credentials: 'include' });
+      const res  = await fetch(
+        `https://bowling-api.onrender.com/api/places/${placeId}/reviews`,
+        { credentials: 'include' }
+      );
       const data = await res.json();
       setReviews(data);
     } catch {
@@ -37,12 +42,15 @@ export default function AlleyDetailsPage() {
   const handleSubmitReview = async (e) => {
     e.preventDefault();
     try {
-      await fetch(`bowling-api.onrender.com/api/places/${placeId}/reviews`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-        body: JSON.stringify({ rating, content })
-      });
+      await fetch(
+        `https://bowling-api.onrender.com/api/places/${placeId}/reviews`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify({ rating, content })
+        }
+      );
       setContent('');
       setRating(5);
       fetchReviews();
@@ -52,21 +60,25 @@ export default function AlleyDetailsPage() {
   };
 
   if (error) {
-    return <div className="p-6 text-red-700 font-[Arial] text-center">❌ {error}</div>;
+    return <div className="p-6 text-red-700 text-center">❌ {error}</div>;
   }
   if (!alley) {
-    return <div className="p-6 text-gray-700 font-[Arial] text-center">⏳ Loading alley details...</div>;
+    return <div className="p-6 text-gray-700 text-center">⏳ Loading alley details...</div>;
   }
 
   return (
-    <div className="min-h-screen bg-[#f8f8f8] p-6 font-[Arial]">
+    <div className="min-h-screen bg-neutral p-6 font-[Arial]">
       <div className="max-w-xl mx-auto bg-white rounded-xl shadow-md p-6 space-y-4">
-        <h1 className="text-3xl font-bold text-[#1976d2]">{alley.name}</h1>
+        <h1 className="text-3xl font-bold secondary">{alley.name}</h1>
         <p>📍 {alley.address}</p>
         <p>📞 {alley.phone}</p>
         {alley.website_url && (
           <p>
-            🌐 <a href={alley.website_url} target="_blank" rel="noopener noreferrer" className="text-[#d32f2f] underline">
+            🌐 <a
+              href={alley.website_url}
+              target="_blank" rel="noopener noreferrer"
+              className="primary underline"
+            >
               Visit Website
             </a>
           </p>
@@ -75,18 +87,21 @@ export default function AlleyDetailsPage() {
         {alley.rating && <p>⭐ Rating: {alley.rating}/5</p>}
       </div>
 
-      {/* Reviews Section */}
       <div className="max-w-xl mx-auto bg-white rounded-xl shadow-md p-6 mt-6">
-        <h2 className="text-2xl font-bold text-primary mb-4">Leave a Review</h2>
+        <h2 className="text-2xl font-bold primary mb-4">Leave a Review</h2>
         <form onSubmit={handleSubmitReview} className="space-y-4">
           <label className="block">
-            Rating: {' '}
+            Rating:{' '}
             <select
               value={rating}
               onChange={e => setRating(+e.target.value)}
               className="p-2 border rounded"
             >
-              {[5,4,3,2,1].map(n => <option key={n} value={n}>{n} Star{n>1?'s':''}</option>)}
+              {[5,4,3,2,1].map(n => (
+                <option key={n} value={n}>
+                  {n} Star{n>1?'s':''}
+                </option>
+              ))}
             </select>
           </label>
           <textarea
@@ -101,7 +116,7 @@ export default function AlleyDetailsPage() {
       </div>
 
       <div className="max-w-xl mx-auto bg-white rounded-xl shadow-md p-6 mt-6">
-        <h2 className="text-2xl font-bold text-primary mb-4">Reviews</h2>
+        <h2 className="text-2xl font-bold primary mb-4">Reviews</h2>
         <ReviewList reviews={reviews} />
       </div>
     </div>
