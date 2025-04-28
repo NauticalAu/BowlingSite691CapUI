@@ -14,7 +14,6 @@ import GameDetail from './components/GameDetail';
 import ProfilePage from './pages/ProfilePage';
 import LeagueDashboardWrapper from './pages/LeagueDashboardWrapper';
 import TournamentsPage from './pages/TournamentsPage';
-import TourneyDetailsPage from './pages/TourneyDetailsPage';
 import AlleyDetailsPage from './pages/AlleyDetailsPage';
 import LeaderBoardPg from './pages/LeaderBoardPg';
 import FavoritesPage from './pages/FavoritesPage';
@@ -65,11 +64,7 @@ function App() {
               <TournamentsPage />
             </PrivateRoute>
           } />
-          <Route path="/tournaments/:id" element={
-            <PrivateRoute>
-              <TourneyDetailsPage />
-            </PrivateRoute>
-          } />
+        
           <Route path="/favorites" element={
             <PrivateRoute>
               <FavoritesPage />
