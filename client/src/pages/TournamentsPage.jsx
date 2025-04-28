@@ -1,36 +1,35 @@
 // src/pages/TournamentsPage.jsx
 import React, { useEffect, useState } from 'react';
-import { useAuth } from '../context/AuthContext';      // assuming you have this
+import { useAuth } from '../context/AuthContext';      // your auth context
 import CreateTournamentForm from '../components/CreateTournamentForm';
 
 export default function TournamentsPage() {
-  const { userId } = useAuth();                       // get your current user ID
-  const [tournaments, setTournaments] = useState([]);
+  const { userId } = useAuth();                       
+  const [tournaments, setTournaments]         = useState([]);
   const [participantsMap, setParticipantsMap] = useState({});
-  const [editing, setEditing] = useState(false);
-  const [formData, setFormData] = useState({
-    tournament_id: null,
-    name: '',
-    description: '',
-    start_date: '',
-    end_date: '',
+  const [editing, setEditing]                 = useState(false);
+  const [formData, setFormData]               = useState({
+    tournament_id:    null,
+    name:             '',
+    description:      '',
+    start_date:       '',
+    end_date:         '',
     bowling_alley_id: ''
   });
 
-  // Fetch tournaments + participants
+  // 1️⃣ Fetch tournaments & then participants for each
   const fetchTournaments = async () => {
     try {
       const res  = await fetch('https://bowling-api.onrender.com/api/tournaments', { credentials: 'include' });
       const data = await res.json();
       setTournaments(data);
-      // load participants for each
       data.forEach(t => loadParticipants(t.tournament_id));
     } catch (err) {
       console.error('Failed to fetch tournaments', err);
     }
   };
 
-  // Fetch participants for one tournament
+  // Fetch the list of participants for a single tournament
   const loadParticipants = async (tid) => {
     try {
       const res  = await fetch(
@@ -44,36 +43,34 @@ export default function TournamentsPage() {
     }
   };
 
-  useEffect(() => {
-    fetchTournaments();
-  }, []);
+  useEffect(fetchTournaments, []);
 
-  // Format date
-  const formatDate = (dateString) =>
+  // Format ISO date to e.g. “Apr 27, 2025”
+  const formatDate = dateString =>
     new Date(dateString).toLocaleDateString(undefined, {
-      year: 'numeric', month: 'short', day: 'numeric'
+      year:  'numeric',
+      month: 'short',
+      day:   'numeric',
     });
 
-  // Begin editing
+  // ✏️ Edit form handlers
   const startEdit = (t) => {
     setEditing(true);
     setFormData({
-      tournament_id:   t.tournament_id,
-      name:            t.name,
-      description:     t.description,
-      start_date:      t.start_date.split('T')[0],
-      end_date:        t.end_date.split('T')[0],
+      tournament_id:    t.tournament_id,
+      name:             t.name,
+      description:      t.description,
+      start_date:       t.start_date.split('T')[0],
+      end_date:         t.end_date.split('T')[0],
       bowling_alley_id: t.bowling_alley_id
     });
   };
 
-  // Handle input changes
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(fd => ({ ...fd, [name]: value }));
   };
 
-  // Submit update
   const handleUpdate = async (e) => {
     e.preventDefault();
     try {
@@ -95,7 +92,7 @@ export default function TournamentsPage() {
     }
   };
 
-  // Delete
+  // 🗑️ Delete
   const handleDelete = async (id) => {
     if (!window.confirm('Are you sure you want to delete this tournament?')) return;
     try {
@@ -114,7 +111,7 @@ export default function TournamentsPage() {
     }
   };
 
-  // Join
+  // 🔗 Join
   const handleJoin = async (id) => {
     try {
       const res = await fetch(
@@ -122,7 +119,6 @@ export default function TournamentsPage() {
         { method: 'POST', credentials: 'include' }
       );
       if (!res.ok) throw new Error('Join failed');
-      // reload participants list only
       await loadParticipants(id);
     } catch (err) {
       console.error(err);
@@ -130,21 +126,35 @@ export default function TournamentsPage() {
     }
   };
 
-  // Check if current user already joined this tournament
-  const isJoined = (tid) => {
-    return (participantsMap[tid] || []).some(p => p.user_id === userId);
+  // 🚪 Leave
+  const handleLeave = async (id) => {
+    try {
+      const res = await fetch(
+        `https://bowling-api.onrender.com/api/tournaments/${id}/leave`,
+        { method: 'DELETE', credentials: 'include' }
+      );
+      if (!res.ok) throw new Error('Leave failed');
+      await loadParticipants(id);
+    } catch (err) {
+      console.error(err);
+      alert('❌ Failed to leave tournament');
+    }
   };
+
+  // Helper: has current user already joined?
+  const isJoined = (tid) =>
+    (participantsMap[tid] || []).some(p => p.user_id === userId);
 
   return (
     <div className="max-w-4xl mx-auto p-6">
       <h1 className="text-3xl font-bold text-primary mb-6">Upcoming Tournaments</h1>
 
-      {/* Creation form */}
+      {/* Create Form */}
       <div className="mb-6">
         <CreateTournamentForm onCreated={fetchTournaments} />
       </div>
 
-      {/* Edit form */}
+      {/* Edit Form */}
       {editing && (
         <div className="bg-white rounded-lg shadow p-6 mb-6">
           <h2 className="text-2xl font-semibold text-secondary mb-4">✏️ Edit Tournament</h2>
@@ -179,7 +189,7 @@ export default function TournamentsPage() {
         </div>
       )}
 
-      {/* Tournament list */}
+      {/* Tournament List */}
       {tournaments.length === 0 ? (
         <p className="text-lg text-neutral">No tournaments available.</p>
       ) : (
@@ -198,25 +208,16 @@ export default function TournamentsPage() {
                 <p className="text-sm text-gray-600">
                   <strong>Location:</strong> {t.alley_name || 'TBD'}
                 </p>
-
-                {/* Participants */}
-                {(participantsMap[t.tournament_id] || []).length > 0 && (
-                  <div className="mt-4">
-                    <strong>Participants:</strong>
-                    <ul className="ml-4 list-disc">
-                      {participantsMap[t.tournament_id].map(p => (
-                        <li key={p.user_id}>{p.full_name}</li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
               </div>
 
               <div className="flex flex-col items-end space-y-2">
-                <span className={`font-semibold ${t.status === 'open' ? 'text-green-600' : 'text-red-600'}`}>
+                <span className={`font-semibold ${
+                  t.status === 'open' ? 'text-green-600' : 'text-red-600'
+                }`}>
                   {t.status === 'open' ? '🟢 Open' : '🔒 Closed'}
                 </span>
                 <div className="flex space-x-2">
+                  {/* Join / Joined */}
                   <button
                     onClick={() => handleJoin(t.tournament_id)}
                     disabled={isJoined(t.tournament_id) || t.status !== 'open'}
@@ -226,6 +227,19 @@ export default function TournamentsPage() {
                   >
                     {isJoined(t.tournament_id) ? 'Joined ✓' : 'Join'}
                   </button>
+
+                  {/* Leave */}
+                  <button
+                    onClick={() => handleLeave(t.tournament_id)}
+                    disabled={!isJoined(t.tournament_id)}
+                    className={`btn-secondary text-sm ${
+                      !isJoined(t.tournament_id) ? 'opacity-50 cursor-not-allowed' : ''
+                    }`}
+                  >
+                    Leave
+                  </button>
+
+                  {/* Edit & Delete */}
                   <button onClick={() => startEdit(t)} className="btn-accent text-sm">Edit</button>
                   <button onClick={() => handleDelete(t.tournament_id)} className="btn-secondary text-sm">Delete</button>
                 </div>
