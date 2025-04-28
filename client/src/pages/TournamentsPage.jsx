@@ -208,6 +208,17 @@ export default function TournamentsPage() {
                 <p className="text-sm text-gray-600">
                   <strong>Location:</strong> {t.alley_name || 'TBD'}
                 </p>
+                {/* 🚩 Participants list */}
+                {participantsMap[t.tournament_id]?.length > 0 && (
+                  <div className="mt-4">
+                    <strong>Participants:</strong>
+                    <ul className="ml-4 list-disc text-gray-800">
+                      {participantsMap[t.tournament_id].map(p => (
+                        <li key={p.user_id}>{p.full_name}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
               </div>
 
               <div className="flex flex-col items-end space-y-2">
