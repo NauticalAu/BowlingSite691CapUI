@@ -83,7 +83,7 @@ export default function BlogListPage() {
 
   return (
     <div className="max-w-4xl mx-auto p-6 space-y-6">
-      <h1 className="text-4xl font-bold text-center text-secondary">📝 Bowling Hub Blog</h1>
+      <h1 className="text-4xl font-bold text-center text-primary">📝 Bowling Hub Blog</h1>
 
       <div className="text-right">
         <Link to="/blog/create" className="btn-primary inline-block mb-4">
@@ -96,7 +96,7 @@ export default function BlogListPage() {
       ) : (
         <div className="space-y-6">
           {posts.map(post => (
-            <div key={post.id} className="bg-white p-6 shadow rounded-lg border">
+            <div key={post.id} className="bg-white rounded-xl shadow-md p-6">
               {editingId === post.id ? (
                 <form onSubmit={handleUpdate} className="space-y-4">
                   <input
