@@ -6,7 +6,10 @@ export default function ScoreSummaryPage() {
   const handleReset = async () => {
     if (!window.confirm('Delete ALL your games? This cannot be undone.')) return;
   
-    const apiUrl = process.env.REACT_APP_API_URL;
+    const apiUrl =
+    process.env.REACT_APP_API_URL ||
+    'https://bowling-api.onrender.com';
+    
     try {
       const res = await fetch(`${apiUrl}/api/games`, {
         method: 'DELETE',
