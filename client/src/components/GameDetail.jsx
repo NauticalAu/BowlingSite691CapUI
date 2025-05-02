@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import Layout from '../components/Layout';
 
 export default function GameDetail() {
   const { id } = useParams();
@@ -73,7 +72,6 @@ export default function GameDetail() {
   }
 
   return (
-    <Layout>
       <div className="max-w-2xl mx-auto bg-white rounded-xl shadow p-6 space-y-6">
         <div className="text-right">
           <Link to="/scores" className="text-blue-600 hover:underline text-sm">
@@ -123,6 +121,5 @@ export default function GameDetail() {
           </ul>
         </div>
       </div>
-    </Layout>
   );
 }

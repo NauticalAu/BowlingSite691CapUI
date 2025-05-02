@@ -4,25 +4,23 @@ import ScoreInsights from '../components/ScoreInsights';
 
 export default function ScoreSummaryPage() {
   const handleReset = async () => {
-    if (!window.confirm('Are you sure you want to delete all your games? This cannot be undone.')) {
-      return;
-    }
+    if (!window.confirm('Delete ALL your games? This cannot be undone.')) return;
+  
+    const apiUrl = process.env.REACT_APP_API_URL;
     try {
-      const res = await fetch(
-        `${process.env.REACT_APP_API_URL || ''}/api/games`,
-        {
-          method: 'DELETE',
-          credentials: 'include',
-        }
-      );
-      if (!res.ok) throw new Error('Failed to reset history');
-      // refresh the page or re-fetch child components
+      const res = await fetch(`${apiUrl}/api/games`, {
+        method: 'DELETE',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' }
+      });
+      if (!res.ok) throw new Error(`Reset failed (${res.status})`);
       window.location.reload();
     } catch (err) {
       console.error(err);
       alert(err.message);
     }
   };
+  
 
   return (
       <div className="max-w-4xl mx-auto space-y-6">
