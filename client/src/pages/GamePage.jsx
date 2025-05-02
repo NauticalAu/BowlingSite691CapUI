@@ -51,7 +51,7 @@ function GamePage() {
 
         const body = {
           gameId: gameId,
-          frame: frameNum,
+          frameNumber: frameNum,
           firstRoll: firstRoll !== '' ? Number(firstRoll) : null,
           secondRoll: secondRoll !== '' ? Number(secondRoll) : null,
           bonusRoll: bonusRoll !== '' ? Number(bonusRoll) : null
