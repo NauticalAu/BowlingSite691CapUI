@@ -1,6 +1,4 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import { useScores } from '../context/ScoresContext';
+import React, { useEffect, useState } from 'react';
 import { StatCard } from './StatCard';
 import {
   LineChart,
@@ -13,37 +11,63 @@ import {
 } from 'recharts';
 
 export default function ScoreInsights() {
-  const { summary } = useScores();
+  const [frames, setFrames] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
-  // Aggregate frame scores into total per game
-  const grouped = summary.reduce((acc, frame) => {
-    acc[frame.game_id] = (acc[frame.game_id] || 0) + (frame.frame_score || 0);
+  useEffect(() => {
+    const fetchSummary = async () => {
+      try {
+        const res = await fetch(
+          `${process.env.REACT_APP_API_URL || 'https://bowling-api.onrender.com'}/api/games/summary`,
+          { credentials: 'include' }
+        );
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Failed to load summary');
+        setFrames(data.summary);
+      } catch (err) {
+        console.error(err);
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchSummary();
+  }, []);
+
+  if (loading) return <p className="text-center py-4">⏳ Loading insights...</p>;
+  if (error)   return <p className="text-red-600 text-center py-4">{error}</p>;
+
+  // Group by game_id and compute totals
+  const totalsByGame = frames.reduce((acc, f) => {
+    acc[f.game_id] = (acc[f.game_id] || 0) + (f.frame_score || 0);
     return acc;
   }, {});
 
-  const gameTotals = Object.entries(grouped).map(([id, total]) => ({ gameId: Number(id), total }));
+  const gameTotals = Object.entries(totalsByGame).map(
+    ([gameId, total]) => ({ gameId: Number(gameId), total })
+  );
+
   const scores = gameTotals.map(g => g.total);
   const totalGames = scores.length;
-  const average = totalGames ? (scores.reduce((a, b) => a + b, 0) / totalGames).toFixed(1) : '0';
+  const average = totalGames
+    ? (scores.reduce((sum, s) => sum + s, 0) / totalGames).toFixed(1)
+    : '0';
   const highScore = totalGames ? Math.max(...scores) : 0;
-  const lastFive = gameTotals.slice(-5).map((g, idx) => ({ name: `Game ${totalGames - 5 + idx + 1}`, score: g.total }));
+  const lastFive = gameTotals
+    .slice(-5)
+    .map((g, i) => ({ name: `Game ${totalGames - 5 + i + 1}`, score: g.total }));
 
   return (
     <div className="space-y-6">
-      {/* Stat cards */}
+      {/* Stat Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
-          <StatCard title="Total Games" value={totalGames} />
-        </motion.div>
-        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
-          <StatCard title="Average Score" value={average} />
-        </motion.div>
-        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>
-          <StatCard title="Highest Game" value={highScore} />
-        </motion.div>
+        <StatCard title="Total Games" value={totalGames} />
+        <StatCard title="Average Score" value={average} />
+        <StatCard title="Highest Game" value={highScore} />
       </div>
 
-      {/* Chart */}
+      {/* Last 5 Games Chart */}
       <div className="w-full h-64 bg-white rounded-xl shadow p-4">
         <h3 className="text-lg font-semibold text-center mb-2">Last 5 Games</h3>
         <ResponsiveContainer width="100%" height="100%">
