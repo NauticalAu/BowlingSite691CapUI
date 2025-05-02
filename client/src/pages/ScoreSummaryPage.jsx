@@ -1,18 +1,46 @@
 import React from 'react';
-import Layout from '../components/Layout';
 import ScoreSummary from '../components/ScoreSummary';
 import ScoreInsights from '../components/ScoreInsights';
 
 export default function ScoreSummaryPage() {
+  const handleReset = async () => {
+    if (!window.confirm('Are you sure you want to delete all your games? This cannot be undone.')) {
+      return;
+    }
+    try {
+      const res = await fetch(
+        `${process.env.REACT_APP_API_URL || ''}/api/games`,
+        {
+          method: 'DELETE',
+          credentials: 'include',
+        }
+      );
+      if (!res.ok) throw new Error('Failed to reset history');
+      // refresh the page or re-fetch child components
+      window.location.reload();
+    } catch (err) {
+      console.error(err);
+      alert(err.message);
+    }
+  };
+
   return (
-    <Layout>
       <div className="max-w-4xl mx-auto space-y-6">
-        <h2 className="text-3xl font-bold text-primary text-center">
-          📈 Your Score History
-        </h2>
-        <p className="text-[18px] text-gray-700 text-center">
-          Review your past games and track your progress over time.
-        </p>
+        <div className="flex justify-between items-center">
+          <div>
+            <h2 className="text-3xl font-bold text-primary">📈 Your Score History</h2>
+            <p className="text-[18px] text-gray-700">
+              Review your past games and track your progress over time.
+            </p>
+          </div>
+          <button
+            onClick={handleReset}
+            className="text-red-600 hover:underline"
+            title="Delete all your game history"
+          >
+            🗑️ Start Over
+          </button>
+        </div>
 
         {/* Performance summary */}
         <ScoreInsights />
@@ -23,9 +51,9 @@ export default function ScoreSummaryPage() {
         </h3>
         <ScoreSummary />
       </div>
-    </Layout>
   );
 }
+
 
 // Compare this snippet from client/src/components/ScoreSummary.jsx:
 // import React, { useEffect, useState } from 'react';
