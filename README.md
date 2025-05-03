@@ -1,6 +1,9 @@
 # BowlingSite691CapUI
 UI for 691 Capstone Bowling Site
 
+## Live Demo
+- **UI**: https://bowling-site691-cap-ui.vercel.app  
+
 ## Project Overview
 The Bowling Hub UI is a web application that allows users to track scores, manage leagues, locate bowling alleys, and participate in events. This repository contains the frontend of the application.
 
@@ -13,9 +16,9 @@ The Bowling Hub UI is a web application that allows users to track scores, manag
 - **Stretch Features**: Reviews and ratings for bowling alleys.
 
 ## Tech Stack
-- **Frontend Framework**: (e.g., React, Vue, Angular)
+- **Frontend Framework:** React v18.x  
 - **State Management**: (if applicable)
-- **Styling**: CSS framework (e.g., Tailwind, Bootstrap)
+- **Styling:** Tailwind CSS v3.x  
 - **API Communication**: RESTful API calls using Fetch/Axios
 
   
